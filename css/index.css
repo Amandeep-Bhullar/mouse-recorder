@@ -1,10 +1,26 @@
-#cursor {
+*{
+	margin: 0;
+	padding: 0;
+
+}
+
+ #cursor {
 	width: 0.75em;
 	height: 0.75em;
 	border-radius: 50%;
 	background-color: black;
-
 	position: fixed;
 	top: 0;
 	left: 0;
+	z-index: 100;
+} 
+#progCursor {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%,-50%);
+	height: 500px;
+	width: 500px;
+	cursor: progress;
+	z-index: 200;	
 }
