@@ -9,7 +9,7 @@
 // few things for you to try to add to the mouse-recorder lab:
 //5. Use a keyup event listener to start/stop the recording. event.code will show
 //    you which key was pressed. Use that in a condition, within the handler callback,
-// 	like if (event.code == 'Space'), for example
+// 	like if (event.code == e'Space'), for exampl
 
 // 6.Slow down the mousemove event recording, so that not every event is logged. 
 //	Try different thresholds to keep the stored data down, without compromising the
@@ -45,7 +45,6 @@ window.addEventListener('mousemove', (event) => {
 
 const startStopFunction = () => {
 	// Start/stop the recording
-	//isRecording = !isRecording;
 	if(!isRecording){
 		isRecording=true;
 		mouseMoves = []
@@ -62,19 +61,35 @@ const startStopFunction = () => {
 $startAndStop.addEventListener('click', startStopFunction)
 
 
-//5.calling the startStopFunction while pressing the r key from the keyboard
+//5.calling the startStopFunction while pressing the r key(keystrokes)  from the keyboard
 window.addEventListener("keyup", event => {
 	if(event.key === 'r')
 		startStopFunction()
 })
+//6.Slow down the mousemove event recording
+function sleep(time){
+	return new Promise(r=>setTimeout(r, time));
+}
 
+//Global variables move a custom cursor to the position that was recorded
+const cursor = document.getElementById("custCursor")
+let currIndex = 0;
+let xPos, yPos;
+	
+//Function named iterate()to move a custom cursor to the position that was recorded,
+function iterate(){
+	sleep(1000)
+	.then(()=>{
+		xPos = mouseMoves[currIndex][0];
+		yPos = mouseMoves[currIndex][1];
+		console.log("Promise Completed");
+		cursor.style.left = `${xPos}px`;
+		cursor.style.top = `${yPos}px`;
+		currIndex ++;
+
+		if(currIndex<mouseMoves.length)
+			iterate();
+	});
+}
 //replay button gives us data which we have recorded already with startAndStop button
-$replayRecording.addEventListener('click', () => {
-	// Replay recording
-	//replaying = true;
-	replaying =mouseMoves.forEach(ele => {
-		console.log(`${ele[0]}px ${ele[1]}px`);
-
-	})
-
-})
+$replayRecording.addEventListener('click', iterate);

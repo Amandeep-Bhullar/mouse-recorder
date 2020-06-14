@@ -13,14 +13,27 @@
 	top: 0;
 	left: 0;
 	z-index: 100;
+	margin: 1em;
+	margin-top: 1.5em;
 } 
-#progCursor {
+.custCursor {
 	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%,-50%);
-	height: 500px;
-	width: 500px;
-	cursor: progress;
-	z-index: 200;	
+	top: -100px;
+	left: -100px;
+	height: 2em;
+	width: 2em;
+	/* cursor: wait; */
+	z-index: 200;
+	background-color: aqua;	
+	border-radius: 50%;;
+} 
+#startAndStop{
+	background-color: lemonchiffon;
+	padding: 1em;
+	padding-left: 2.5em;
+	margin: 1em;
+}
+#replayRecording{
+	padding: 1em;
+	
 }
