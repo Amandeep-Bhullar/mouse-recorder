@@ -33,13 +33,15 @@ window.addEventListener('load', () => {
 	$startAndStop.innerHTML = "Start Recording";
 })
 
+let count = 0;
 //on the event of mousemove, if the isRecording will be true then push the sub array into main mousemove array's indexes
 window.addEventListener('mousemove', (event) => {
-	//console.dir(event);
-	if (isRecording) {
+	count ++;
+	// if recording is on, picks 1 in 2 movements captured
+	if (isRecording && count%5==0) {
 		// Record the data to the Array:
 		const subArray = [event.clientX, event.clientY, event.timeStamp]
-		mouseMoves.push(subArray);
+		mouseMoves.push({type: "move", val: subArray});
 	}
 })
 
@@ -53,7 +55,10 @@ const startStopFunction = () => {
 		isRecording=false;
 		$startAndStop.innerHTML = "Start Recording";
 		mouseMoves.forEach(ele => {
-			console.log(`${ele[0]}px ${ele[1]}px`);
+			if(ele.type === "move")
+				console.log(`mouse moved: ${ele.val[0]}px ${ele.val[1]}px`);
+			else
+				console.log(`key pressed: ${ele.val}`);
 		});
 	}
 }
@@ -63,8 +68,10 @@ $startAndStop.addEventListener('click', startStopFunction)
 
 //5.calling the startStopFunction while pressing the r key(keystrokes)  from the keyboard
 window.addEventListener("keyup", event => {
-	if(event.key === 'r')
+	mouseMoves.push({type: "keyPressed", val: event.key});
+	if(event.key === 'r'){
 		startStopFunction()
+	}
 })
 //6.Slow down the mousemove event recording
 function sleep(time){
@@ -78,13 +85,17 @@ let xPos, yPos;
 	
 //Function named iterate()to move a custom cursor to the position that was recorded,
 function iterate(){
-	sleep(1000)
+	sleep(500)
 	.then(()=>{
-		xPos = mouseMoves[currIndex][0];
-		yPos = mouseMoves[currIndex][1];
-		console.log("Promise Completed");
-		cursor.style.left = `${xPos}px`;
-		cursor.style.top = `${yPos}px`;
+		if(mouseMoves[currIndex].type === "move"){
+			xPos = mouseMoves[currIndex].val[0];
+			yPos = mouseMoves[currIndex].val[1];
+			cursor.style.left = `${xPos}px`;
+			cursor.style.top = `${yPos}px`;
+		}
+		else{
+			console.log(`key pressed: ${mouseMoves[currIndex].val}`)
+		}
 		currIndex ++;
 
 		if(currIndex<mouseMoves.length)
